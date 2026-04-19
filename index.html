@@ -3,87 +3,181 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Abrindo...</title>
+<title>Abrindo WhatsApp</title>
 
 <script>
-const WHATS =
-"https://wa.me/15559064249?text=Oii%20Nayara%2C%20te%20vi%20no%20tiktok%20e%20quero%20comprar%20seus%20conte%C3%BAdos!";
+const LINK_FINAL = "https://wa.me/15559064249?text=Oii%20Nayara%2C%20te%20vi%20no%20tiktok%20e%20quero%20comprar%20seus%20conte%C3%BAdos!";
 
-function abrirExterno() {
-
-    const ua = navigator.userAgent.toLowerCase();
-
-    // ANDROID (melhor método)
-    if (ua.includes("android")) {
-
-        const chromeIntent =
-        "intent://wa.me/15559064249?text=Oii%20Nayara%2C%20te%20vi%20no%20tiktok%20e%20quero%20comprar%20seus%20conte%C3%BAdos!" +
-        "#Intent;scheme=https;package=com.android.chrome;end";
-
-        window.location = chromeIntent;
-
-        setTimeout(() => {
-            window.location = WHATS;
-        }, 1200);
-    }
-
-    // IPHONE
-    else {
-
-        window.open(WHATS, "_blank");
-
-        setTimeout(() => {
-            window.location = WHATS;
-        }, 800);
-    }
+function abrirWhats(){
+    window.location.href = LINK_FINAL;
 }
 
-window.onload = function(){
-    setTimeout(()=>{
-        abrirExterno();
-    },300);
-};
+function abrirPresell(){
+    document.getElementById("tutorial").style.display = "none";
+    document.getElementById("presell").style.display = "block";
+
+    let p = 0;
+    const barra = document.getElementById("barra");
+    const txt = document.getElementById("percent");
+
+    const timer = setInterval(()=>{
+        p += 4;
+        barra.style.width = p + "%";
+        txt.innerHTML = p + "%";
+
+        if(p >= 100){
+            clearInterval(timer);
+
+            setTimeout(()=>{
+                abrirWhats();
+            },500);
+        }
+    },120);
+}
 </script>
 
 <style>
-body{
+*{
 margin:0;
-font-family:Arial;
-background:#000;
-color:#fff;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+background:#f5f5f5;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
-text-align:center;
+min-height:100vh;
 padding:20px;
 }
+
 .box{
-max-width:420px;
-}
-button{
+background:#fff;
 width:100%;
+max-width:420px;
+border-radius:20px;
+padding:30px 25px;
+box-shadow:0 10px 30px rgba(0,0,0,.12);
+text-align:center;
+}
+
+h1{
+font-size:26px;
+margin-bottom:20px;
+color:#111;
+line-height:1.3;
+}
+
+.step{
+margin-top:18px;
 padding:18px;
+border-radius:16px;
+background:#f0f0f0;
 font-size:20px;
 font-weight:bold;
+color:#111;
+line-height:1.5;
+}
+
+.arrow{
+font-size:38px;
+margin-top:8px;
+}
+
+.btn{
+margin-top:28px;
+width:100%;
+padding:18px;
 border:none;
 border-radius:14px;
-background:#25D366;
+font-size:20px;
+font-weight:bold;
+background:#fe2c55;
 color:#fff;
+cursor:pointer;
+}
+
+small{
+display:block;
+margin-top:18px;
+font-size:15px;
+color:#666;
+line-height:1.5;
+}
+
+.bar{
+width:100%;
+height:18px;
+background:#ddd;
+border-radius:30px;
+overflow:hidden;
+margin-top:25px;
+}
+
+.fill{
+height:100%;
+width:0%;
+background:#25D366;
+}
+
+.percent{
+font-size:28px;
+font-weight:bold;
 margin-top:20px;
+color:#111;
+}
+
+#presell{
+display:none;
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
-<h1>Abrindo navegador externo...</h1>
-<p>Se não abrir sozinho, toque abaixo:</p>
+<!-- TUTORIAL -->
+<div class="box" id="tutorial">
 
-<button onclick="abrirExterno()">
-ABRIR WHATSAPP
+<h1>⚠️ PARA ABRIR O WHATSAPP</h1>
+
+<div class="step">
+1️⃣ Clique nos <br><b>3 pontinhos acima</b>
+<div class="arrow">↗️</div>
+</div>
+
+<div class="step">
+2️⃣ Depois clique em <br><b>Abrir no navegador</b>
+<div class="arrow">🌐</div>
+</div>
+
+<button class="btn" onclick="abrirPresell()">
+JÁ ABRI NO NAVEGADOR
 </button>
+
+<small>
+Após abrir no navegador externo,<br>
+clique no botão acima.
+</small>
+
+</div>
+
+<!-- PRESELL -->
+<div class="box" id="presell">
+
+<h1>Preparando seu acesso...</h1>
+
+<p style="font-size:18px;color:#555;">
+Aguarde enquanto abrimos seu WhatsApp.
+</p>
+
+<div class="bar">
+<div class="fill" id="barra"></div>
+</div>
+
+<div class="percent" id="percent">0%</div>
+
 </div>
 
 </body>
