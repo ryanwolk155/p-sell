@@ -3,113 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Continuar no WhatsApp</title>
-
+<title>Carregando...</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-background:#0f0f0f;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-padding:20px;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#0f0f0f;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:20px;
 }
-
 .container{
-width:100%;
-max-width:420px;
-background:#1a1a1a;
-padding:30px;
-border-radius:18px;
-text-align:center;
-box-shadow:0 0 25px rgba(0,0,0,.35);
+  width:100%;
+  max-width:420px;
+  text-align:center;
+  background:#1a1a1a;
+  padding:28px;
+  border-radius:18px;
+  box-shadow:0 0 25px rgba(0,0,0,.35);
 }
-
 h1{
-font-size:28px;
-margin-bottom:15px;
+  font-size:24px;
+  margin-bottom:14px;
 }
-
 p{
-font-size:16px;
-color:#cfcfcf;
-margin-bottom:30px;
-line-height:1.5;
+  opacity:.9;
+  margin-bottom:18px;
+  line-height:1.5;
 }
-
-.btn{
-display:block;
-width:100%;
-background:#25D366;
-color:white;
-text-decoration:none;
-padding:18px;
-font-size:22px;
-font-weight:bold;
-border-radius:14px;
-transition:.2s;
+.bar{
+  width:100%;
+  height:14px;
+  background:#333;
+  border-radius:999px;
+  overflow:hidden;
+  margin-bottom:14px;
 }
-
-.btn:active{
-transform:scale(.97);
+.fill{
+  height:100%;
+  width:0%;
+  background:#25D366;
+  transition:width .25s linear;
 }
-
-.small{
-margin-top:18px;
-font-size:13px;
-color:#8d8d8d;
+.percent{
+  font-size:18px;
+  font-weight:bold;
+  margin-bottom:18px;
+}
+button{
+  width:100%;
+  border:none;
+  padding:16px;
+  border-radius:14px;
+  font-size:18px;
+  font-weight:bold;
+  background:#25D366;
+  color:#fff;
+  cursor:pointer;
+}
+small{
+  display:block;
+  margin-top:14px;
+  opacity:.7;
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-<h1>Seu atendimento está pronto</h1>
+  <h1>Preparando seu acesso...</h1>
+  <p>Aguarde enquanto abrimos seu atendimento no WhatsApp.</p>
 
-<p>Clique no botão abaixo para continuar diretamente no WhatsApp.</p>
+  <div class="bar">
+    <div class="fill" id="fill"></div>
+  </div>
 
-<a href="#" class="btn" onclick="abrirWhats()">ABRIR WHATSAPP</a>
+  <div class="percent" id="percent">0%</div>
 
-<div class="small">
-Caso não abra automaticamente, clique novamente.
-</div>
+  <button id="btn" onclick="goWhats()" style="display:none;">
+    ABRIR WHATSAPP
+  </button>
+
+  <small>Se não abrir automático, toque no botão.</small>
 </div>
 
 <script>
-function abrirWhats(){
+const numero = "15559064249"; // TROQUE AQUI
+const msg = encodeURIComponent("Oi, vim pelo TikTok e quero atendimento.");
 
-var numero = "15559064249"; // TROQUE AQUI
-var mensagem = "Oi vim do TikTok e quero comprar seus conteúdos!";
+const wa = `https://wa.me/${numero}?text=${msg}`;
+const intent = `intent://send?phone=${numero}#Intent;scheme=smsto;package=com.whatsapp;end`;
 
-var texto = encodeURIComponent(mensagem);
+let p = 0;
+const fill = document.getElementById("fill");
+const percent = document.getElementById("percent");
+const btn = document.getElementById("btn");
 
-var ua = navigator.userAgent.toLowerCase();
+const timer = setInterval(()=>{
+  p += 4;
+  fill.style.width = p + "%";
+  percent.innerText = p + "%";
 
-if(/iphone|ipad|ipod/.test(ua)){
-window.location.href = "whatsapp://send?phone="+numero+"&text="+texto;
+  if(p >= 100){
+    clearInterval(timer);
+    btn.style.display = "block";
+    autoOpen();
+  }
+},120);
 
-setTimeout(function(){
-window.location.href = "https://api.whatsapp.com/send?phone="+numero+"&text="+texto;
-},1500);
+function autoOpen(){
+  // Android tenta abrir app externo
+  if(/Android/i.test(navigator.userAgent)){
+    window.location.href = intent;
 
-}else{
+    setTimeout(()=>{
+      window.location.href = wa;
+    },1200);
 
-window.location.href = "intent://send?phone="+numero+"&text="+texto+"#Intent;scheme=whatsapp;package=com.whatsapp;end";
-
-setTimeout(function(){
-window.location.href = "https://api.whatsapp.com/send?phone="+numero+"&text="+texto;
-},1000);
-
+  }else{
+    // iPhone e outros
+    window.location.href = wa;
+  }
 }
 
+function goWhats(){
+  autoOpen();
 }
 </script>
 
