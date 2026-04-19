@@ -2,51 +2,55 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abrindo WhatsApp...</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Abrindo...</title>
 
 <script>
-const LINK_FINAL = "https://wa.me/15559064249?text=Oii%20Nayara%2C%20te%20vi%20no%20tiktok%20e%20quero%20comprar%20seus%20conte%C3%BAdos!";
+const WHATS =
+"https://wa.me/15559064249?text=Oii%20Nayara%2C%20te%20vi%20no%20tiktok%20e%20quero%20comprar%20seus%20conte%C3%BAdos!";
 
-function sairTikTok() {
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
+function abrirExterno() {
 
-    if (/android/i.test(ua)) {
+    const ua = navigator.userAgent.toLowerCase();
 
-        window.location.href =
-        "intent://" + LINK_FINAL.replace("https://", "").replace("http://", "") +
+    // ANDROID (melhor método)
+    if (ua.includes("android")) {
+
+        const chromeIntent =
+        "intent://wa.me/15559064249?text=Oii%20Nayara%2C%20te%20vi%20no%20tiktok%20e%20quero%20comprar%20seus%20conte%C3%BAdos!" +
         "#Intent;scheme=https;package=com.android.chrome;end";
 
-        setTimeout(() => {
-            window.location.href = LINK_FINAL;
-        }, 1500);
-
-    } else if (/iPhone|iPad|iPod/i.test(ua)) {
-
-        window.location.href = LINK_FINAL;
+        window.location = chromeIntent;
 
         setTimeout(() => {
-            window.open(LINK_FINAL, "_blank");
+            window.location = WHATS;
+        }, 1200);
+    }
+
+    // IPHONE
+    else {
+
+        window.open(WHATS, "_blank");
+
+        setTimeout(() => {
+            window.location = WHATS;
         }, 800);
-
-    } else {
-        window.open(LINK_FINAL, "_blank");
     }
 }
 
-window.onload = function() {
-    setTimeout(() => {
-        sairTikTok();
-    }, 500);
+window.onload = function(){
+    setTimeout(()=>{
+        abrirExterno();
+    },300);
 };
 </script>
 
 <style>
 body{
 margin:0;
+font-family:Arial;
 background:#000;
 color:#fff;
-font-family:Arial;
 display:flex;
 justify-content:center;
 align-items:center;
@@ -55,27 +59,18 @@ text-align:center;
 padding:20px;
 }
 .box{
-max-width:400px;
+max-width:420px;
 }
 button{
-margin-top:20px;
-padding:16px 28px;
-border:none;
-border-radius:12px;
-font-size:18px;
+width:100%;
+padding:18px;
+font-size:20px;
 font-weight:bold;
+border:none;
+border-radius:14px;
 background:#25D366;
 color:#fff;
-cursor:pointer;
-width:100%;
-}
-h1{
-font-size:28px;
-margin-bottom:10px;
-}
-p{
-opacity:.9;
-line-height:1.5;
+margin-top:20px;
 }
 </style>
 </head>
@@ -83,11 +78,11 @@ line-height:1.5;
 <body>
 
 <div class="box">
-<h1>Abrindo WhatsApp...</h1>
-<p>Se não abrir automaticamente, clique abaixo.</p>
+<h1>Abrindo navegador externo...</h1>
+<p>Se não abrir sozinho, toque abaixo:</p>
 
-<button onclick="sairTikTok()">
-ABRIR AGORA
+<button onclick="abrirExterno()">
+ABRIR WHATSAPP
 </button>
 </div>
 
